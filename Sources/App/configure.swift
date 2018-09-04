@@ -43,5 +43,6 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     /// Используем Leaf для прорисовки шаблонов web страниц
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
     
 }

@@ -3,22 +3,47 @@ import Crypto
 
 /// Здесь регистрируем задействуваемые в приложении пути.
 public func routes(_ router: Router) throws {
-    
+ 
+    // отражет индексную страницу в корне
+    router.get { req in
+        return try req.view().render("welcome")
+    }
     // Основной пример "Hello, world!"
     router.get("hello") { req in
         return "Hello, world!"
     }
-    // отражет шаблон страницы welcome м надписью "It works"
-    router.get { req in
-        return try req.view().render("welcome")
-    }
     
+   
     // Скажем hello при запросе '/hello/Greg'
     router.get("hello", String.parameter) { req -> Future<View> in
         return try req.view().render("hello", [
             "name": req.parameters.next(String.self)
             ])
     }
+    
+    
+    router.get("info") { req -> String in
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        struct DataPrint: Content {
+            var place: String
+            var framework: String
+            var time: String
+        }
+        let date = Date()
+        let calendar = Calendar.current
+        
+        let hours = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        let seconds = calendar.component(.second, from: date)
+        let time = "\(hours):\(minutes):\(seconds)"
+        let jsonData = try encoder.encode(DataPrint(place: "Дом", framework: "Vapor", time: time))
+        
+        return String(data: jsonData, encoding: .utf8) ?? "{}"
+    }
+
+    
     
     // Объявляем маршрут POST
     let userController = UserController()
@@ -37,5 +62,8 @@ public func routes(_ router: Router) throws {
     bearer.get("todos", use: todoController.index)
     bearer.post("todos", use: todoController.create)
     bearer.delete("todos", Todo.parameter, use: todoController.delete)
+    
+    
+    
 }
 
