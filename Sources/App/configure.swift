@@ -1,8 +1,15 @@
-import FluentSQLite
 import Vapor
+import Leaf
+import FluentSQLite
 
 /// Вызывается перед иницилизацией основного приложения app.swift.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
+    
+    /// Регистрация менеджера шаблонов Leaf
+    try services.register(LeafProvider())
+    /// Используем Leaf для прорисовки шаблонов web страниц
+    config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+
     /// Решистрация менеджера баз данных
     try services.register(FluentSQLiteProvider())
 
@@ -13,7 +20,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     /// Регистрация "прослойки"
     var middlewares = MiddlewareConfig() // создаем пустую конфигурацию (_empty_) прослойки
-    /// middlewares.use(FileMiddleware.self) // Обслуживаем файлы в папке `Public/`
+    middlewares.use(FileMiddleware.self) // Обслуживаем файлы в папке `Public/`
     middlewares.use(ErrorMiddleware.self) // Ловим ошибки и преобразования в HTTP ответах
     services.register(middlewares)
 
