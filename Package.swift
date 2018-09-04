@@ -12,9 +12,12 @@ let package = Package(
         
         // 🍃 Выразительный, производительный и расширяемый язык шаблонов для Swift.
         .package(url: "https://github.com/vapor/leaf.git", from: "3.0.0"),
+        
+        // 👤 Пакет авторизации и аутинфикации для Fluent.
+        .package(url: "https://github.com/vapor/auth.git", from: "2.0.0"),
     ],
     targets: [
-        .target(name: "App", dependencies: [ "Vapor", "Leaf", "FluentSQLite"]),
+        .target(name: "App", dependencies: [ "Vapor", "Leaf", "FluentSQLite", "Authentication"]),
         .target(name: "Run", dependencies: ["App"]),
         .testTarget(name: "AppTests", dependencies: ["App"])
     ]

@@ -1,4 +1,5 @@
 import Vapor
+import Crypto
 
 /// Здесь регистрируем задействуваемые в приложении пути.
 public func routes(_ router: Router) throws {
@@ -19,10 +20,22 @@ public func routes(_ router: Router) throws {
             ])
     }
     
+    // Объявляем маршрут POST
+    let userController = UserController()
+    router.post("users", use: userController.create)
+    
+    // Основа защиты авторизации пользовательских маршрутов
+    let basic = router.grouped(User.basicAuthMiddleware(using: BCryptDigest()))
+    basic.post("login", use: userController.login)
+    
+
+    
     // Пример конфигурации контроллера для трех разных запросов
+    // Предьявляем токен для защащенных маршрутов
+    let bearer = router.grouped(User.tokenAuthMiddleware())
     let todoController = TodoController()
-    router.get("todos", use: todoController.index)
-    router.post("todos", use: todoController.create)
-    router.delete("todos", Todo.parameter, use: todoController.delete)
+    bearer.get("todos", use: todoController.index)
+    bearer.post("todos", use: todoController.create)
+    bearer.delete("todos", Todo.parameter, use: todoController.delete)
 }
 
