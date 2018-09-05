@@ -16,7 +16,34 @@ final class UserController {
         return token.save(on: req)
     }
     
-    /// Создаем нового пользователя.
+    // Возвращает список всех пользователей в базе данных в виде JSON
+    func userList(_ req: Request) throws -> Future<[User]>  {
+        return User.query(on: req).all()
+    }
+    
+    // Возвращает список всех пользователей в базе данных в виде HTML страницы
+    func showUsersList(_ req: Request) throws -> Future<View> {
+        let context = UsersContext(users: User.query(on: req).all())
+        return try req.view().render("users", context)
+    }
+    
+    // Получаем конкретного пользователя
+    // /users/<id>, например /users/2
+    func getUserById(_ req: Request) throws -> Future<User>{
+        let user = try req.parameters.next(User.self)
+        return user
+    }
+    
+    
+    // создаем нового пользователя и записываем в БД через POST запрос
+    // данные пользователя без хеширования пароля (чистый текст)
+    func addUser(_ req: Request) throws -> Future<User>  {
+        let user = try req.content.syncDecode(User.self)
+        return user.save(on: req)
+    }
+
+    // создаем нового пользователя и записываем в БД через POST запрос
+    // данные пользователя передаюся с хешированием пароля (кодированный)
     func create(_ req: Request) throws -> Future<UserResponse> {
         // декодируем содержимое запроса
         return try req.content.decode(CreateUserRequest.self).flatMap { user -> Future<User> in
