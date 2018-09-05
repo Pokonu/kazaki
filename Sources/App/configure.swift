@@ -17,7 +17,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try services.register(AuthenticationProvider())
     
     /// Решистрация менеджера баз данных
-    /// try services.register(FluentPostgreSQLProvider())
+    try services.register(FluentPostgreSQLProvider())
 
     /// Регистрация путей при загрузки приложения в браузере
     let router = EngineRouter.default()
@@ -32,13 +32,13 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(middlewares)
 
     // Конфигурируем базу данных PostgreSQL
-    let postgresql = PostgreSQLDatabase(config: PostgreSQLDatabaseConfig(hostname: SQL_HOST, port: SQL_PORT, username: SQL_USERNAME, database: SQL_DATABASE!, password: SQL_PASSWORD!))
+    //let postgresql = PostgreSQLDatabase(config: PostgreSQLDatabaseConfig(hostname: SQL_HOST, port: SQL_PORT, username: SQL_USERNAME, database: SQL_DATABASE!, password: SQL_PASSWORD!))
 
-    /// Регистрируем сервис для обсулживания сконфигурированной БД SQLite.
-    var databases = DatabasesConfig()
-    databases.enableLogging(on: .psql)
-    databases.add(database: postgresql, as: .psql)
-    services.register(databases)
+    /// Регистрируем сервис для обслуживания сконфигурированной БД SQLite.
+    //var databases = DatabasesConfig()
+    //databases.enableLogging(on: .psql)
+    //databases.add(database: postgresql, as: .psql)
+    //services.register(databases)
 
     /// Кнфигурируем миграции
     var migrations = MigrationConfig()

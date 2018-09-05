@@ -43,7 +43,18 @@ public func routes(_ router: Router) throws {
         return String(data: jsonData, encoding: .utf8) ?? "{}"
     }
 
+    struct PostgreSQLVersion: Codable {
+        let version: String
+    }
     
+    router.get("sql") { req in
+        return req.withPooledConnection(to: .psql) { conn in
+            return conn.raw("SELECT version();")
+                .all(decoding: PostgreSQLVersion.self)
+            }.map { rows in
+                return rows[0].version
+        }
+    }
     
     // Объявляем маршрут POST
     let userController = UserController()
