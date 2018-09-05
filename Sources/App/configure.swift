@@ -3,11 +3,11 @@ import Leaf
 import FluentPostgreSQL
 import Authentication
 
-let SQL_HOST: String = "localhost"
-let SQL_PORT:Int = 5432
-let SQL_DATABASE: String? = "main"
-let SQL_USERNAME: String = "veresk"
-let SQL_PASSWORD: String? = "UyK-2Dr-SQL-171"
+// let SQL_HOST: String = "localhost"
+// let SQL_PORT:Int = 5432
+// let SQL_DATABASE: String? = "main"
+// let SQL_USERNAME: String = "veresk"
+// let SQL_PASSWORD: String? = "UyK-2Dr-SQL-171"
 
 /// Вызывается перед иницилизацией основного приложения app.swift.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
