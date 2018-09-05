@@ -1,5 +1,5 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 /// Простой контроллер todo-списка.
 final class TodoController {

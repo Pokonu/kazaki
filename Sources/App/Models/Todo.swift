@@ -1,8 +1,8 @@
-import FluentSQLite
+import FluentPostgreSQL
 import Vapor
 
 /// Описание записи Todo списка.
-final class Todo: SQLiteModel {
+final class Todo: PostgreSQLModel {
     /// The unique identifier for this `Todo`.
     var id: Int?
 
@@ -29,8 +29,8 @@ extension Todo {
 
 /// Разрешаем `Todo` принимать участие в динамической миграции.
 extension Todo: Migration {
-    static func prepare(on conn: SQLiteConnection) -> Future<Void> {
-        return SQLiteDatabase.create(Todo.self, on: conn) { builder in
+    static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
+        return PostgreSQLDatabase.create(Todo.self, on: conn) { builder in
             builder.field(for: \.id, isIdentifier: true)
             builder.field(for: \.title)
             builder.field(for: \.userID)

@@ -1,11 +1,11 @@
 import Authentication
 import Crypto
-import FluentSQLite
+import FluentPostgreSQL
 import Vapor
 
 /// Описывает временный маркер проверки подлинности,
 /// идентифицирующий зарегистрированного пользователя.
-final class UserToken: SQLiteModel {
+final class UserToken: PostgreSQLModel {
     /// Создает новый `UserToken` для данного пользователя.
     static func create(userID: User.ID) throws -> UserToken {
         // Генерирует случайные 128-битовые, base64-encoded строки.
@@ -65,8 +65,8 @@ extension UserToken: Token {
 /// Позволяет использовать 'User Token' для быстрой миграции.
 extension UserToken: Migration {
     /// Смотрите `Migration`.
-    static func prepare(on conn: SQLiteConnection) -> Future<Void> {
-        return SQLiteDatabase.create(UserToken.self, on: conn) { builder in
+    static func prepare(on conn: PostgreSQLConnection) -> Future<Void> {
+        return PostgreSQLDatabase.create(UserToken.self, on: conn) { builder in
             builder.field(for: \.id, isIdentifier: true)
             builder.field(for: \.string)
             builder.field(for: \.userID)
