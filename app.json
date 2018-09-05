@@ -1,0 +1,17 @@
+{
+  "name": "kazaki",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/kylef/heroku-buildpack-swift"
+    }
+  ]
+}
