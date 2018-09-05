@@ -2,6 +2,7 @@ import Crypto
 import Vapor
 import FluentPostgreSQL
 
+
 /// Создаем новых пользователей и решистрируем их.
 final class UserController {
     /// Регистрируем пользователя и возвращаем токен для доступа к защищенным модулям проекта.
@@ -33,7 +34,6 @@ final class UserController {
         let user = try req.parameters.next(User.self)
         return user
     }
-    
     
     // создаем нового пользователя и записываем в БД через POST запрос
     // данные пользователя без хеширования пароля (чистый текст)
