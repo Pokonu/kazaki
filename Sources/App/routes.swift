@@ -1,5 +1,6 @@
 import Vapor
 import Crypto
+import Leaf
 
 /// Здесь регистрируем задействуваемые в приложении пути.
 public func routes(_ router: Router) throws {
@@ -7,12 +8,13 @@ public func routes(_ router: Router) throws {
     // отражет индексную страницу в корне
     router.get { req in
         return try req.view().render("welcome")
+        //return try req.make(LeafRenderer.self).render("welcome")
     }
+	
     // Основной пример "Hello, world!"
     router.get("hello") { req in
         return "Hello, world!"
     }
-    
    
     // Скажем hello при запросе '/hello/Greg'
     router.get("hello", String.parameter) { req -> Future<View> in
@@ -56,15 +58,61 @@ public func routes(_ router: Router) throws {
         }
     }
     
-    // Объявляем маршрут POST
+    // Вариант 1
+    // создаем нового пользователя и записываем в БД через POST запрос
+    // данные пользователя без хеширования пароля (чистый текст)
+    router.post(User.self, at:"create1") { req, user -> Future<User> in
+        return user.save(on: req)
+    }
+    
+    // Вариант 2
+    // создаем нового пользователя и записываем в БД через POST запрос
+    // данные пользователя без хеширования пароля (чистый текст)
+    router.post("create2") { req -> Future<User> in
+        let user = try req.content.syncDecode(User.self)
+        return user.save(on: req)
+    }
+    
+    // Вариант 3
+    // создаем нового пользователя и записываем в БД через POST запрос
+    // данные пользователя передаюся с хешированием пароля (кодированный)
     let userController = UserController()
-    router.post("users", use: userController.create)
+    router.post("create3", use: userController.create)
+    
+    
+    
+    
+    struct UsersContext: Encodable {
+        let users: Future<[User]>
+    }
+    // Получаем список всех пользователей
+    // /users
+    router.get("usersAll") { req -> Future<[User]> in
+        return User.query(on: req).all()
+    }
+    
+    router.get("usersHttp") { req -> Future<View> in
+        let users = UsersContext(users: User.query(on: req).all())
+        //return try req.make(LeafRenderer.self).render("users", users)
+        return try req.view().render("users", users)
+    }
+    
+    // Получаем конкретного пользователя
+    // /users/<id>, например /users/2
+    router.get("users", User.parameter) { req -> Future<User> in
+        let user = try req.parameters.next(User.self)
+        return user
+    }
+    
+
     
     // Основа защиты авторизации пользовательских маршрутов
+    // заходим на сайт под своей учетной записью
+    // /login?
     let basic = router.grouped(User.basicAuthMiddleware(using: BCryptDigest()))
     basic.post("login", use: userController.login)
     
-
+    
     
     // Пример конфигурации контроллера для трех разных запросов
     // Предьявляем токен для защащенных маршрутов

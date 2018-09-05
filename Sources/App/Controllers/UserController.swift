@@ -4,7 +4,7 @@ import FluentPostgreSQL
 
 /// Создаем новых пользователей и решистрируем их.
 final class UserController {
-    /// Решистрируем пользовател и возвращаем токен для доступа к защищенным модулям проекта.
+    /// Регистрируем пользователя и возвращаем токен для доступа к защищенным модулям проекта.
     func login(_ req: Request) throws -> Future<UserToken> {
         // аторизируем пользователя
         let user = try req.requireAuthenticated(User.self)
