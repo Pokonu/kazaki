@@ -3,11 +3,24 @@ import Leaf
 import FluentPostgreSQL
 import Authentication
 
-// let SQL_HOST: String = "localhost"
-// let SQL_PORT:Int = 5432
-// let SQL_DATABASE: String? = "main"
-// let SQL_USERNAME: String = "veresk"
-// let SQL_PASSWORD: String? = "UyK-2Dr-SQL-171"
+// Данные БД PostgreSQL для текущего проекта
+// ПОМНИ, что перед началом запуска проекта
+// необходимо установить на сервер пакет postgresql
+// запустить сервер psql и создать пользователя БД
+// с именем ниже и БД с именем ниже
+//
+// psql -U postgres -d postgres -W
+// psql> create role veresk;
+// psql> create database test owner veresk;
+//
+struct SQLParameters {
+    let host: String = "localhost"
+    let port:Int = 5432
+    let database: String = "test"
+    let username: String = "veresk"
+    let password: String = "Test123"
+}
+let db = SQLParameters()
 
 /// Вызывается перед иницилизацией основного приложения app.swift.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
@@ -16,8 +29,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try services.register(LeafProvider())
     try services.register(AuthenticationProvider())
     
-    /// Решистрация менеджера баз данных
-    try services.register(FluentPostgreSQLProvider())
+    /// Регистрация менеджера баз данных
+    //try services.register(FluentPostgreSQLProvider())
 
     /// Регистрация путей при загрузки приложения в браузере
     let router = EngineRouter.default()
@@ -31,14 +44,15 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     middlewares.use(ErrorMiddleware.self) // Ловим ошибки и преобразования в HTTP ответах
     services.register(middlewares)
 
-    // Конфигурируем базу данных PostgreSQL
-    //let postgresql = PostgreSQLDatabase(config: PostgreSQLDatabaseConfig(hostname: SQL_HOST, port: SQL_PORT, username: SQL_USERNAME, database: SQL_DATABASE!, password: SQL_PASSWORD!))
-
+     // Конфигурируем базу данных PostgreSQL
+    var databases = DatabasesConfig()
+    let databaseConfig = PostgreSQLDatabaseConfig(hostname: db.host, port: db.port, username: db.username, database: db.database, password: db.password)
+    let database = PostgreSQLDatabase(config: databaseConfig)
+    
     /// Регистрируем сервис для обслуживания сконфигурированной БД SQLite.
-    //var databases = DatabasesConfig()
-    //databases.enableLogging(on: .psql)
-    //databases.add(database: postgresql, as: .psql)
-    //services.register(databases)
+    databases.enableLogging(on: .psql)
+    databases.add(database: database, as: .psql)
+    services.register(databases)
 
     /// Кнфигурируем миграции
     var migrations = MigrationConfig()
