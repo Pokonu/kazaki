@@ -28,7 +28,7 @@ public func routes(_ router: Router) throws {
     let userController = UserController()
     // создаем нового пользователя и записываем в БД через POST запрос
     // данные пользователя без хеширования пароля (чистый текст)
-    router.post("add", use: userController.addUser)
+    //router.post("add", use: userController.addUser)
     
     // Вариант 3
     // создаем нового пользователя и записываем в БД через POST запрос
@@ -49,17 +49,20 @@ public func routes(_ router: Router) throws {
     // Основа защиты авторизациипользовательских маршрутов
     // заходим на сайт под своей учетной записью
     // /login?
-    let basic = router.grouped(User.basicAuthMiddleware(using: BCryptDigest()))
-    basic.post("login", use: userController.login)
-    
+    // let basic = router.grouped(User.basicAuthMiddleware(using: BCryptDigest()))
+    // basic.post("login", use: userController.login)
     
     // Пример конфигурации контроллера для трех разных запросов
     // Предьявляем токен для защащенных маршрутов
-    let bearer = router.grouped(User.tokenAuthMiddleware())
+    let bearer = router.grouped([User.basicAuthMiddleware(using: BCryptDigest()),
+                                 User.tokenAuthMiddleware()])
     let todoController = TodoController()
+    bearer.post("login", use: userController.login)
     bearer.get("todos", use: todoController.index)
     bearer.post("todos", use: todoController.create)
     bearer.delete("todos", Todo.parameter, use: todoController.delete)
+    
+    
     
     
     

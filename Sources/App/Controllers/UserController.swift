@@ -37,13 +37,17 @@ final class UserController {
     
     // создаем нового пользователя и записываем в БД через POST запрос
     // данные пользователя без хеширования пароля (чистый текст)
+    /*
     func addUser(_ req: Request) throws -> Future<User>  {
         let user = try req.content.syncDecode(User.self)
         return user.save(on: req)
     }
-
-    // создаем нового пользователя и записываем в БД через POST запрос
-    // данные пользователя передаюся с хешированием пароля (кодированный)
+     */
+    
+    //
+    /// Регистрируем нового пользователя и записываем в БД через POST запрос
+    /// данные пользователя передаюся с хешированием пароля (кодированный)
+    ///
     func create(_ req: Request) throws -> Future<UserResponse> {
         // декодируем содержимое запроса
         return try req.content.decode(CreateUserRequest.self).flatMap { user -> Future<User> in
@@ -51,14 +55,14 @@ final class UserController {
             guard user.password == user.verifyPassword else {
                 throw Abort(.badRequest, reason: "Пароли должны совпадать.")
             }
-            
-            // Вычисляем хэш пользовательского пароля используя BCrypt
-            let hash = try BCrypt.hash(user.password)
-            // записываем нового пользователя
-            return User(id: nil, name: user.name, email: user.email, passwordHash: hash)
+        // Вычисляем хэш пользовательского пароля используя BCrypt
+        let hash = try BCrypt.hash(user.password)
+        
+        // Сохраняем нового пользователя (в случае наличия пользователя вернется ошибка)
+        return User(id: nil, name: user.name, email: user.email, passwordHash: hash)
                 .save(on: req)
         }.map { user in
-            // сопоставляем с общим ответом Пользователя (без хэша пароля)
+            // Возвращаем JSON с телом структуры UserResponse
             return try UserResponse(id: user.requireID(), name: user.name, email: user.email)
         }
     }

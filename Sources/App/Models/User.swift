@@ -1,5 +1,7 @@
+import Foundation
 import Authentication
 import FluentPostgreSQL
+import Fluent
 import Vapor
 
 /// Описываем зарегистрированного пользователя, которому принадлежат заметки todo.
@@ -12,10 +14,10 @@ final class User: PostgreSQLModel {
     var name: String
     
     /// Адрес электронной почты пользователя.
-    var email: String
+    private(set) var email: String
     
     /// BCrypt хэш пароль пользователя..
-    var passwordHash: String
+    private(set) var passwordHash: String
     
     /// Создаем нового пользователя.
     init(id: Int? = nil, name: String, email: String, passwordHash: String) {
