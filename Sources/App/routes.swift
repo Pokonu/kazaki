@@ -23,7 +23,7 @@ public func routes(_ router: Router) throws {
     // Получаем данные из запроса и отображаем их в виде JSON
     router.get("info", use: controller.info)
 
-    router.get("sql", use: controller.sql)
+	router.get("sql", use: controller.sql)
     
     let userController = UserController()
     // создаем нового пользователя и записываем в БД через POST запрос
@@ -38,6 +38,9 @@ public func routes(_ router: Router) throws {
 
     // Получаем список всех пользователей в виде JSON
     router.get("users-list", use: userController.userList)
+    
+    // Получаем список всех пользователей в виде JSON
+    router.get("sendmail", use: controller.emailSend)
     
     // Получаем список всех пользователей в виде HTML страницы
     router.get("users-page", use: userController.showUsersList)

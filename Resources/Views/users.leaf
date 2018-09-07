@@ -1,5 +1,9 @@
 #set("title") {<h1>Список пользователей</h1>}
-
+<form action="https://example.com/tweet" method="POST">
+<input type="hidden" name="csrf-token" value="#(csrf)">
+<input type="text" name="tweet">
+<input type="submit">
+</form>
 #set("body") {
 	#if(users){
 		<table class="table table-bordered table-hover">

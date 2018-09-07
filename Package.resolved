@@ -11,6 +11,42 @@
         }
       },
       {
+        "package": "Cryptor",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueCryptor.git",
+        "state": {
+          "branch": null,
+          "revision": "30b6cf38322838d1e973e0626c6abf9602b03cf5",
+          "version": "1.0.9"
+        }
+      },
+      {
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
+        "state": {
+          "branch": null,
+          "revision": "ce36f72f2c36b88f847de50c8c0ed8021ff80097",
+          "version": "1.0.16"
+        }
+      },
+      {
+        "package": "SSLService",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSSLService.git",
+        "state": {
+          "branch": null,
+          "revision": "a8e24ec6db452ed202502ebae885b39f43e34d98",
+          "version": "1.0.16"
+        }
+      },
+      {
+        "package": "CommonCrypto",
+        "repositoryURL": "https://github.com/IBM-Swift/CommonCrypto.git",
+        "state": {
+          "branch": null,
+          "revision": "9156d238dbc4c15455b77b45e721b2bb0b995e31",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Console",
         "repositoryURL": "https://github.com/vapor/console.git",
         "state": {
@@ -35,6 +71,15 @@
           "branch": null,
           "revision": "4b85405430df1892ee3aa1554bdb477e96cf46ad",
           "version": "3.2.0"
+        }
+      },
+      {
+        "package": "CSRF",
+        "repositoryURL": "https://github.com/vapor-community/CSRF.git",
+        "state": {
+          "branch": null,
+          "revision": "473fde772a3b0ad156181d0ae7015ec4c99bb29a",
+          "version": "2.0.0"
         }
       },
       {
@@ -80,6 +125,24 @@
           "branch": null,
           "revision": "fc6a3938b1c7cfa49dc6b06e54d84179bdf92810",
           "version": "3.0.1"
+        }
+      },
+      {
+        "package": "LoggerAPI",
+        "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
+        "state": {
+          "branch": null,
+          "revision": "5041f2673aa75d6e973d9b6bd3956bc5068387c8",
+          "version": "1.7.3"
+        }
+      },
+      {
+        "package": "Moat",
+        "repositoryURL": "https://github.com/vapor-community/moat.git",
+        "state": {
+          "branch": null,
+          "revision": "3c413684a24444bfcd66268ad1c3dada10462250",
+          "version": "0.0.6"
         }
       },
       {
@@ -164,6 +227,15 @@
         }
       },
       {
+        "package": "SwiftSMTP",
+        "repositoryURL": "https://github.com/IBM-Swift/Swift-SMTP",
+        "state": {
+          "branch": null,
+          "revision": "496f779a073991609cf3745214e49449d9b5db24",
+          "version": "5.1.0"
+        }
+      },
+      {
         "package": "TemplateKit",
         "repositoryURL": "https://github.com/vapor/template-kit.git",
         "state": {
@@ -197,6 +269,15 @@
           "branch": null,
           "revision": "54632a6c1e7ecd9923c0d00b612de936de1c4745",
           "version": "3.0.8"
+        }
+      },
+      {
+        "package": "VaporSecurityHeaders",
+        "repositoryURL": "https://github.com/brokenhandsio/VaporSecurityHeaders.git",
+        "state": {
+          "branch": null,
+          "revision": "a4435a84ce1ed5558e66783d4a14e4b758b09309",
+          "version": "2.0.0"
         }
       },
       {

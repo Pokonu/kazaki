@@ -1,6 +1,10 @@
 import Crypto
 import Vapor
 import FluentPostgreSQL
+import CSRF
+import SwiftSMTP
+
+let csrf = CSRF()
 
 
 /// Создаем новых пользователей и решистрируем их.
@@ -24,7 +28,10 @@ final class UserController {
     
     // Возвращает список всех пользователей в базе данных в виде HTML страницы
     func showUsersList(_ req: Request) throws -> Future<View> {
-        let context = UsersContext(users: User.query(on: req).all())
+    //func showUsersList(_ req: Request) throws -> Response {
+        let token = try csrf.createToken(from: req)
+        let context = UsersContext(users: User.query(on: req).all(), csrf: token)
+        
         return try req.view().render("users", context)
     }
     

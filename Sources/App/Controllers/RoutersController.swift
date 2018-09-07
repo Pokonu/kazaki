@@ -1,11 +1,35 @@
 import Crypto
 import Vapor
 import HTTP
+import SwiftSMTP
+
+
+// Отправить сообщение
+func sendEmail(text: String, nameTo: String, emailTo: String, subject: String = "Hello World"){
+    // Конфигурируем email клиент SwiftSMTP
+    let emailClient = SMTP(
+        hostname: "smtp.timeweb.ru",
+        email: "veresk@izei.ru",
+        password: "DtHtCr1001",
+        port: 2525   // Работает только этот порт
+    )
+
+    let from = Mail.User(name: "TestServer", email:"veresk@izei.ru")
+    let to = Mail.User(name: nameTo, email: emailTo)
+    
+    let mail = Mail(from: from, to: [to], subject: subject, text: text)
+    
+    emailClient.send(mail) { (error) in
+        //print(error!)
+        if error != nil { print("Ошибка отпраки письма: \(subject) к \(to)") }
+    }
+}
 
 
 /// Создаем процедуры для обработки маршрутов.
 struct UsersContext: Encodable {
     let users: Future<[User]>
+    let csrf: String
 }
 
 final class RoutersController {
@@ -14,7 +38,7 @@ final class RoutersController {
 	}
     
     
-    func hello(_ req: Request)throws -> String{
+    func hello(_ req: Request)throws -> String {
         return "Hello, world!"
     }
     
@@ -53,5 +77,12 @@ final class RoutersController {
                 return rows[0].version
             }
     }
+    
+    func emailSend(_ req: Request) throws -> String {
+        // Проверка отправки письма
+        sendEmail(text: "Проверка отправки писем", nameTo:"Alex", emailTo: "spam@izei.ru", subject: "Проверка всего содержимого!")
+        return "Письмо отправлено!"
+    }
+
     
 }
