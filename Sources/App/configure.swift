@@ -101,16 +101,25 @@ func configureMiddlewares(_ services: inout Services) {
     middlewares.use(originProtection)
     middlewares.use(SessionsMiddleware.self) // Разрешаем использование сессий.
     middlewares.use(FileMiddleware.self) // Обслуживаем файлы в папке `Public/`
-    middlewares.use(ErrorMiddleware.self) // Ловим ошибки и преобразования в HTTP ответах
     middlewares.use(CSRF.self)            // Прослойка защитного механизма сессий - CSRF
+    
+    // Подключаем модуль взаимодействия (CORS) с JavaScript на стороне клиента
+    let corsConfiguration = CORSMiddleware.Configuration(
+        allowedOrigin: .all,
+        allowedMethods: [.GET, .POST, .PUT, .OPTIONS, .DELETE, .PATCH],
+        allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
+    )
+    let corsMiddleware = CORSMiddleware(configuration: corsConfiguration)
+    middlewares.use(corsMiddleware)         // Ловим ошибки и преобразования в HTTP ответах
+    middlewares.use(ErrorMiddleware.self)
     
     // Защита заголовков HEAD: Content-Security-Policy,
     // X-XSS-Protection, X-Frame-Options and X-Content-Type-Options.
     // Для управление в ручном режиме описано по ссылке ниже
     // https://github.com/brokenhandsio/VaporSecurityHeaders
     // Она должна регистрироваться в middlewares в последнюю очередь
-
     middlewares.use(SecurityHeaders.self)
+    
     services.register(middlewares)
 }
 
